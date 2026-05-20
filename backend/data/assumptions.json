@@ -1,0 +1,45 @@
+{
+  "panel_wattage_w": 550,
+  "panel_area_sqm": 2.4,
+  "panel_efficiency_pct": 21,
+  "system_losses_pct": 15,
+  "system_lifetime_years": 25,
+  "degradation_rate_pct_per_year": 0.5,
+  "maintenance_cost_pct_of_capex": 1.5,
+  "co2_factor_kg_per_kwh": 0.4,
+  "days_per_month": [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31],
+  "months_ar": ["يناير","فبراير","مارس","أبريل","مايو","يونيو","يوليو","أغسطس","سبتمبر","أكتوبر","نوفمبر","ديسمبر"],
+  "months_en": ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],
+  "installation_cost_per_kw_sar": {
+    "grid_tied": 3500,
+    "hybrid": 5200,
+    "off_grid": 6800
+  },
+  "electricity_tariff_sar_kwh": {
+    "residential": 0.18,
+    "commercial": 0.20,
+    "industrial": 0.18,
+    "farm": 0.10,
+    "factory": 0.18,
+    "remote": 0.30
+  },
+  "battery_cost_per_kwh_sar": 1600,
+  "battery_days_autonomy": {
+    "hybrid": 1,
+    "off_grid": 2
+  },
+  "inverter_cost_fraction": 0.12,
+  "discount_rate_pct": 5,
+  "facility_type_descriptions": {
+    "residential": {"ar": "سكني", "en": "Residential"},
+    "commercial": {"ar": "تجاري", "en": "Commercial"},
+    "factory": {"ar": "مصنع", "en": "Factory"},
+    "farm": {"ar": "مزرعة", "en": "Farm"},
+    "remote": {"ar": "موقع نائي", "en": "Remote Site"}
+  },
+  "system_type_descriptions": {
+    "grid_tied": {"ar": "مرتبط بالشبكة", "en": "Grid-Tied"},
+    "hybrid": {"ar": "هجين", "en": "Hybrid"},
+    "off_grid": {"ar": "مستقل", "en": "Off-Grid"}
+  }
+}

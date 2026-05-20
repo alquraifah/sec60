@@ -1,0 +1,148 @@
+{
+  "cities": [
+    {
+      "id": "riyadh",
+      "name_ar": "الرياض",
+      "name_en": "Riyadh",
+      "lat": 24.7136,
+      "lon": 46.6753,
+      "peak_sun_hours": 6.2,
+      "avg_irradiance_kwh_m2_day": 6.2,
+      "avg_temp_c": 26.5,
+      "region_ar": "منطقة الرياض",
+      "monthly_irradiance_factors": [0.82, 0.86, 0.94, 0.99, 1.02, 1.00, 0.97, 0.98, 1.00, 0.98, 0.90, 0.82]
+    },
+    {
+      "id": "jeddah",
+      "name_ar": "جدة",
+      "name_en": "Jeddah",
+      "lat": 21.4858,
+      "lon": 39.1925,
+      "peak_sun_hours": 5.8,
+      "avg_irradiance_kwh_m2_day": 5.8,
+      "avg_temp_c": 28.5,
+      "region_ar": "منطقة مكة المكرمة",
+      "monthly_irradiance_factors": [0.84, 0.88, 0.95, 0.99, 1.01, 1.00, 0.98, 0.99, 1.00, 0.97, 0.91, 0.84]
+    },
+    {
+      "id": "dammam",
+      "name_ar": "الدمام",
+      "name_en": "Dammam",
+      "lat": 26.4207,
+      "lon": 50.0888,
+      "peak_sun_hours": 5.9,
+      "avg_irradiance_kwh_m2_day": 5.9,
+      "avg_temp_c": 27.0,
+      "region_ar": "المنطقة الشرقية",
+      "monthly_irradiance_factors": [0.81, 0.85, 0.93, 0.99, 1.02, 1.00, 0.97, 0.98, 1.00, 0.98, 0.89, 0.80]
+    },
+    {
+      "id": "qassim",
+      "name_ar": "القصيم",
+      "name_en": "Qassim",
+      "lat": 26.3260,
+      "lon": 43.9750,
+      "peak_sun_hours": 6.0,
+      "avg_irradiance_kwh_m2_day": 6.0,
+      "avg_temp_c": 25.0,
+      "region_ar": "منطقة القصيم",
+      "monthly_irradiance_factors": [0.82, 0.87, 0.95, 1.00, 1.03, 1.01, 0.97, 0.98, 1.00, 0.97, 0.89, 0.81]
+    },
+    {
+      "id": "madinah",
+      "name_ar": "المدينة المنورة",
+      "name_en": "Madinah",
+      "lat": 24.5247,
+      "lon": 39.5692,
+      "peak_sun_hours": 6.0,
+      "avg_irradiance_kwh_m2_day": 6.0,
+      "avg_temp_c": 26.0,
+      "region_ar": "منطقة المدينة المنورة",
+      "monthly_irradiance_factors": [0.83, 0.87, 0.95, 1.00, 1.02, 1.00, 0.97, 0.98, 1.00, 0.97, 0.90, 0.82]
+    },
+    {
+      "id": "makkah",
+      "name_ar": "مكة المكرمة",
+      "name_en": "Makkah",
+      "lat": 21.3891,
+      "lon": 39.8579,
+      "peak_sun_hours": 5.9,
+      "avg_irradiance_kwh_m2_day": 5.9,
+      "avg_temp_c": 29.0,
+      "region_ar": "منطقة مكة المكرمة",
+      "monthly_irradiance_factors": [0.84, 0.88, 0.95, 0.99, 1.01, 1.00, 0.98, 0.99, 1.00, 0.97, 0.91, 0.84]
+    },
+    {
+      "id": "tabuk",
+      "name_ar": "تبوك",
+      "name_en": "Tabuk",
+      "lat": 28.3998,
+      "lon": 36.5715,
+      "peak_sun_hours": 6.3,
+      "avg_irradiance_kwh_m2_day": 6.3,
+      "avg_temp_c": 22.5,
+      "region_ar": "منطقة تبوك",
+      "monthly_irradiance_factors": [0.81, 0.85, 0.94, 1.00, 1.04, 1.02, 0.98, 0.99, 1.00, 0.98, 0.88, 0.80]
+    },
+    {
+      "id": "hail",
+      "name_ar": "حائل",
+      "name_en": "Hail",
+      "lat": 27.5114,
+      "lon": 41.7208,
+      "peak_sun_hours": 6.1,
+      "avg_irradiance_kwh_m2_day": 6.1,
+      "avg_temp_c": 22.0,
+      "region_ar": "منطقة حائل",
+      "monthly_irradiance_factors": [0.81, 0.86, 0.94, 1.00, 1.03, 1.01, 0.97, 0.98, 1.00, 0.97, 0.89, 0.80]
+    },
+    {
+      "id": "abha",
+      "name_ar": "أبها",
+      "name_en": "Abha",
+      "lat": 18.2465,
+      "lon": 42.5117,
+      "peak_sun_hours": 5.5,
+      "avg_irradiance_kwh_m2_day": 5.5,
+      "avg_temp_c": 18.0,
+      "region_ar": "منطقة عسير",
+      "monthly_irradiance_factors": [0.86, 0.90, 0.96, 0.99, 1.00, 0.95, 0.93, 0.95, 0.98, 0.98, 0.93, 0.87]
+    },
+    {
+      "id": "jazan",
+      "name_ar": "جيزان",
+      "name_en": "Jazan",
+      "lat": 16.8892,
+      "lon": 42.5511,
+      "peak_sun_hours": 5.3,
+      "avg_irradiance_kwh_m2_day": 5.3,
+      "avg_temp_c": 30.0,
+      "region_ar": "منطقة جازان",
+      "monthly_irradiance_factors": [0.86, 0.90, 0.96, 0.99, 1.01, 0.98, 0.96, 0.97, 0.99, 0.98, 0.92, 0.86]
+    },
+    {
+      "id": "alula",
+      "name_ar": "العُلا",
+      "name_en": "AlUla",
+      "lat": 26.6089,
+      "lon": 37.9219,
+      "peak_sun_hours": 6.4,
+      "avg_irradiance_kwh_m2_day": 6.4,
+      "avg_temp_c": 24.0,
+      "region_ar": "منطقة المدينة المنورة",
+      "monthly_irradiance_factors": [0.81, 0.85, 0.93, 0.99, 1.03, 1.01, 0.97, 0.98, 1.01, 0.99, 0.89, 0.80]
+    },
+    {
+      "id": "najran",
+      "name_ar": "نجران",
+      "name_en": "Najran",
+      "lat": 17.4922,
+      "lon": 44.1277,
+      "peak_sun_hours": 6.0,
+      "avg_irradiance_kwh_m2_day": 6.0,
+      "avg_temp_c": 25.5,
+      "region_ar": "منطقة نجران",
+      "monthly_irradiance_factors": [0.85, 0.89, 0.96, 1.00, 1.02, 1.00, 0.97, 0.98, 1.00, 0.98, 0.91, 0.85]
+    }
+  ]
+}

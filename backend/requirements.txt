@@ -1,0 +1,15 @@
+fastapi
+uvicorn[standard]
+pydantic
+pandas
+numpy
+scikit-learn
+joblib
+httpx
+python-multipart
+pillow
+reportlab
+matplotlib
+arabic-reshaper
+python-bidi
+python-dotenv
