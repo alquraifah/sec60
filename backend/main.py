@@ -35,14 +35,26 @@ app = FastAPI(
 )
 
 # ── CORS ─────────────────────────────────────────────────────────────────────
+# Read extra allowed origins from the environment (comma-separated).
+# On Render: set ALLOWED_ORIGINS=https://sec60.vercel.app,https://your-domain.com
+import os as _os
+_extra = [o.strip() for o in _os.getenv("ALLOWED_ORIGINS", "").split(",") if o.strip()]
+
+CORS_ORIGINS = [
+    # Production
+    "https://sec60.vercel.app",          # main Vercel deployment
+    "https://sec60-git-main-alquraifah.vercel.app",  # Vercel git branch URL pattern
+    # Local development
+    "http://localhost:5173",
+    "http://localhost:3000",
+    "http://127.0.0.1:5173",
+    "http://127.0.0.1:3000",
+] + _extra
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "http://localhost:5173",
-        "http://localhost:3000",
-        "http://127.0.0.1:5173",
-        "http://127.0.0.1:3000",
-    ],
+    allow_origins=CORS_ORIGINS,
+    allow_origin_regex=r"https://.*\.vercel\.app",   # covers all Vercel preview URLs
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
