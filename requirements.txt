@@ -1,0 +1,13 @@
+streamlit>=1.32.0
+pandas
+numpy
+scikit-learn
+joblib
+requests
+plotly
+reportlab
+matplotlib
+arabic-reshaper
+python-bidi
+Pillow
+httpx
