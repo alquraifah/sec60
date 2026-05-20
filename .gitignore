@@ -10,8 +10,8 @@ env/
 !frontend/.env.example
 !backend/.env.example
 
-# ML models (large binary files — regenerate with: python models/train_model.py)
-backend/models/*.pkl
+# ML models are committed (each ~5 MB after training-size reduction).
+# Regenerate locally: python backend/models/train_model.py && python backend/ml/train_model.py
 
 # Generated PDF reports
 backend/reports/*.pdf

@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: sec60
+    env: python
+    rootDir: backend
+    buildCommand: pip install -r requirements.txt && python models/train_model.py && python ml/train_model.py
+    startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: ALLOWED_ORIGINS
+        value: https://sec60.vercel.app
+    autoDeploy: true

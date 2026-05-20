@@ -72,7 +72,7 @@ def _feasibility(capex, annual_sav, psh, tariff):
     return max(0.0, min(100.0, score))
 
 
-def generate_dataset(n=8000, seed=42) -> pd.DataFrame:
+def generate_dataset(n=2000, seed=42) -> pd.DataFrame:
     rng     = np.random.default_rng(seed)
     records = []
     for _ in range(n):
@@ -132,11 +132,11 @@ def train():
         X_tr, X_te, y_tr, y_te = train_test_split(X, y, test_size=0.2, random_state=42)
 
         if target == "system_size_kw":
-            model = RandomForestRegressor(n_estimators=200, max_depth=14,
+            model = RandomForestRegressor(n_estimators=100, max_depth=10,
                                          random_state=42, n_jobs=-1)
         else:
-            model = GradientBoostingRegressor(n_estimators=200, max_depth=5,
-                                              learning_rate=0.05, random_state=42)
+            model = GradientBoostingRegressor(n_estimators=100, max_depth=4,
+                                              learning_rate=0.08, random_state=42)
 
         model.fit(X_tr, y_tr)
         preds = model.predict(X_te)

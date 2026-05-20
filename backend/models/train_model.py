@@ -85,7 +85,7 @@ def _feasibility(capex, annual_savings, psh, tariff):
     return max(0, min(100, score))
 
 
-def generate_dataset(n=6000, seed=42) -> pd.DataFrame:
+def generate_dataset(n=2000, seed=42) -> pd.DataFrame:
     rng = np.random.default_rng(seed)
     records = []
 
@@ -145,7 +145,7 @@ def train():
     y_size = df["system_size_kw"].values
     X_tr, X_te, y_tr, y_te = train_test_split(X, y_size, test_size=0.2, random_state=42)
 
-    size_model = RandomForestRegressor(n_estimators=200, max_depth=14, random_state=42, n_jobs=-1)
+    size_model = RandomForestRegressor(n_estimators=100, max_depth=10, random_state=42, n_jobs=-1)
     size_model.fit(X_tr, y_tr)
     preds = size_model.predict(X_te)
     print(f"  [system_size] R²={r2_score(y_te, preds):.4f}  MAE={mean_absolute_error(y_te, preds):.2f} kW")
@@ -154,7 +154,7 @@ def train():
     y_fs = df["feasibility_score"].values
     X_tr2, X_te2, y_tr2, y_te2 = train_test_split(X, y_fs, test_size=0.2, random_state=42)
 
-    fs_model = GradientBoostingRegressor(n_estimators=200, max_depth=5, learning_rate=0.05, random_state=42)
+    fs_model = GradientBoostingRegressor(n_estimators=100, max_depth=4, learning_rate=0.08, random_state=42)
     fs_model.fit(X_tr2, y_tr2)
     preds2 = fs_model.predict(X_te2)
     print(f"  [feasibility]  R²={r2_score(y_te2, preds2):.4f}  MAE={mean_absolute_error(y_te2, preds2):.2f} pts")
