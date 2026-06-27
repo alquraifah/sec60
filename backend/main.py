@@ -27,6 +27,7 @@ from routes.analyze import router as analyze_router
 from routes.cities import router as cities_router
 from routes.ocr import router as ocr_router
 from routes.report import router as report_router
+from routes.forecast import router as forecast_router
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s  %(levelname)s  %(message)s")
 logger = logging.getLogger(__name__)
@@ -70,6 +71,7 @@ app.include_router(analyze_router)           # POST /analyze
 app.include_router(cities_router)            # GET  /cities
 app.include_router(ocr_router)               # POST /ocr-bill
 app.include_router(report_router)            # POST /generate-report
+app.include_router(forecast_router)          # POST /forecast
 
 # ── Static: PDF reports ───────────────────────────────────────────────────────
 REPORTS_DIR = Path("reports")

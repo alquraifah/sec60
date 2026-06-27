@@ -1,26 +1,19 @@
 """
 AI explanation service.
-Generates Arabic rule-based explanations; plug in OpenAI/Groq here when API key is available.
+Generates bilingual (Arabic + English) rule-based explanations.
+LLM integration point: plug in OpenAI/Groq here when API key is available.
 """
 
-import os
 
-# ── OpenAI integration point ──────────────────────────────────────────────────
-# Uncomment and add your key to .env to enable LLM-powered explanations.
-# OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
-# GROQ_API_KEY   = os.getenv("GROQ_API_KEY")
-# ─────────────────────────────────────────────────────────────────────────────
-
-
-def _score_label(score: float) -> tuple[str, str, str]:
-    """Return (recommendation_key, arabic_label, color)."""
+def _score_label(score: float) -> tuple[str, str, str, str]:
+    """Return (key, arabic_label, english_label, color)."""
     if score >= 80:
-        return "highly_feasible", "مجدي جداً ✅", "green"
+        return "highly_feasible", "موصى به بشدة ✅", "Highly Recommended ✅", "green"
     if score >= 65:
-        return "feasible", "مجدي ✅", "lime"
+        return "feasible", "موصى به ✅", "Recommended ✅", "lime"
     if score >= 45:
-        return "needs_review", "يحتاج مراجعة ⚠️", "yellow"
-    return "not_recommended", "غير مجدي ❌", "red"
+        return "needs_review", "يحتاج مراجعة ⚠️", "Needs Review ⚠️", "yellow"
+    return "not_recommended", "غير موصى به ❌", "Not Recommended ❌", "red"
 
 
 def generate(
@@ -32,90 +25,141 @@ def generate(
     financial: dict,
     solar_data: dict,
 ) -> dict:
-    """Build a rule-based Arabic explanation for the analysis result."""
+    """Build bilingual AI explanation for the analysis result."""
 
-    rec_key, rec_ar, color = _score_label(feasibility_score)
+    rec_key, rec_ar, rec_en, color = _score_label(feasibility_score)
 
     psh = solar_data["peak_sun_hours"]
     annual_savings = financial["annual_savings_sar"]
     payback = financial["payback_years"]
     roi = financial["roi_25yr_pct"]
-    capex = financial["installation_cost_sar"]
-    city_ar = city["name_ar"]
+    city_ar = city.get("name_ar", "")
+    city_en = city.get("name_en", "")
     monthly_savings = financial["monthly_savings_sar"]
 
-    # ── Reasons (positive factors) ────────────────────────────────
-    reasons = []
-
+    # ── Arabic content ────────────────────────────────────────────
+    reasons_ar = []
     if psh >= 6.2:
-        reasons.append(f"☀️ {city_ar} تتمتع بإشعاع شمسي استثنائي ({psh:.1f} ساعة ذروة يومياً)")
-    elif psh >= 5.8:
-        reasons.append(f"☀️ {city_ar} لديها إشعاع شمسي ممتاز ({psh:.1f} ساعة ذروة يومياً)")
-    elif psh >= 5.0:
-        reasons.append(f"☀️ الإشعاع الشمسي في {city_ar} جيد ({psh:.1f} ساعة ذروة يومياً)")
+        reasons_ar.append(f"☀️ {city_ar} تتمتع بإشعاع شمسي استثنائي ({psh:.1f} ساعة ذروة يومياً)")
+    elif psh >= 5.5:
+        reasons_ar.append(f"☀️ الإشعاع الشمسي في {city_ar} ممتاز ({psh:.1f} ساعة ذروة يومياً)")
+    else:
+        reasons_ar.append(f"☀️ الإشعاع الشمسي في {city_ar} جيد ({psh:.1f} ساعة ذروة يومياً)")
 
     if roi > 200:
-        reasons.append(f"💰 عائد الاستثمار مرتفع جداً ({roi:.0f}٪ خلال 25 سنة)")
+        reasons_ar.append(f"💰 عائد الاستثمار مرتفع جداً ({roi:.0f}٪ خلال 25 سنة)")
     elif roi > 100:
-        reasons.append(f"💰 عائد الاستثمار جيد ({roi:.0f}٪ خلال 25 سنة)")
+        reasons_ar.append(f"💰 عائد الاستثمار جيد ({roi:.0f}٪ خلال 25 سنة)")
 
-    if payback < 6:
-        reasons.append(f"⏱ فترة الاسترداد قصيرة جداً ({payback:.1f} سنوات فقط)")
-    elif payback < 10:
-        reasons.append(f"⏱ فترة الاسترداد معقولة ({payback:.1f} سنوات)")
-
-    if facility_type == "remote":
-        reasons.append("🔋 النظام المستقل أو الهجين مثالي للمواقع النائية البعيدة عن الشبكة")
+    if payback < 7:
+        reasons_ar.append(f"⏱ فترة الاسترداد قصيرة ({payback:.1f} سنوات)")
+    elif payback < 12:
+        reasons_ar.append(f"⏱ فترة الاسترداد معقولة ({payback:.1f} سنوات)")
 
     if facility_type == "farm":
-        reasons.append("🌱 مزارع الطاقة الشمسية تحسّن الربحية الزراعية وتقلل تكاليف الضخ")
+        reasons_ar.append("🌱 الطاقة الشمسية تحسّن الربحية الزراعية وتقلل تكاليف الضخ")
+    if facility_type == "remote":
+        reasons_ar.append("🔋 النظام مثالي للمواقع النائية البعيدة عن الشبكة")
 
-    if annual_savings > 50000:
-        reasons.append(f"💵 التوفير المتوقع مرتفع ({annual_savings:,.0f} ريال سنوياً)")
-    elif annual_savings > 10000:
-        reasons.append(f"💵 توفير سنوي ملموس ({annual_savings:,.0f} ريال)")
+    if annual_savings > 30000:
+        reasons_ar.append(f"💵 توفير سنوي مرتفع ({annual_savings:,.0f} ريال)")
+    elif annual_savings > 5000:
+        reasons_ar.append(f"💵 توفير سنوي ملموس ({annual_savings:,.0f} ريال)")
 
-    # ── Risks ─────────────────────────────────────────────────────
-    risks = []
-
-    if psh < 5.5:
-        risks.append(f"⚠️ الإشعاع الشمسي في {city_ar} أقل من المتوسط المثالي")
-
+    risks_ar = []
     if payback > 15:
-        risks.append(f"⚠️ فترة الاسترداد طويلة نسبياً ({payback:.1f} سنة)")
-
+        risks_ar.append(f"⚠️ فترة الاسترداد طويلة نسبياً ({payback:.1f} سنة)")
+    if psh < 5.5:
+        risks_ar.append("⚠️ الإشعاع الشمسي أقل من المتوسط المثالي")
     if roi < 50:
-        risks.append("⚠️ عائد الاستثمار منخفض - ينصح بمراجعة حجم النظام والبدائل")
-
+        risks_ar.append("⚠️ عائد الاستثمار منخفض")
     if system_type == "off_grid":
-        risks.append("🔋 أنظمة البطاريات تحتاج صيانة دورية وإعادة تكلفة بعد 10-15 سنة")
+        risks_ar.append("🔋 بطاريات Off-Grid تحتاج صيانة دورية")
+    if not risks_ar:
+        risks_ar.append("✅ لا توجد مخاطر جوهرية")
 
-    if not risks:
-        risks.append("✅ لا توجد مخاطر جوهرية - النتائج إيجابية بشكل عام")
-
-    # ── Next steps ────────────────────────────────────────────────
-    next_steps = [
+    next_steps_ar = [
         f"📞 التواصل مع مزودي الطاقة الشمسية المعتمدين في {city_ar}",
-        "📋 طلب عروض أسعار مفصلة من 3 شركات على الأقل للمقارنة",
-        "⚡ التحقق من متطلبات الربط بالشبكة مع شركة الكهرباء (SEC/SWCC)",
-        "🏠 فحص الموقع والسقف للتأكد من الملاءمة الإنشائية",
-        "📄 مراجعة إمكانية الاستفادة من برامج دعم هيئة الطاقة المتجددة (REPDO)",
+        "📋 طلب عروض أسعار من 3 شركات على الأقل",
+        "⚡ التحقق من متطلبات الربط بالشبكة مع شركة الكهرباء",
+        "🏗 فحص الموقع للتأكد من الملاءمة الإنشائية",
+        "📄 مراجعة برامج دعم هيئة الطاقة المتجددة (REPDO)",
     ]
 
-    # ── Summary ───────────────────────────────────────────────────
-    summary = (
+    summary_ar = (
         f"بناءً على تحليل البيانات الشمسية والمالية لموقعك في {city_ar}، "
         f"يُنصح بتركيب نظام طاقة شمسية بقدرة {system_size_kw:.1f} كيلوواط. "
         f"يُتوقع أن يوفر النظام ما يقارب {monthly_savings:,.0f} ريال شهرياً "
         f"({annual_savings:,.0f} ريال سنوياً) مع فترة استرداد تقدر بـ {payback:.1f} سنوات."
     )
 
+    # ── English content ───────────────────────────────────────────
+    reasons_en = []
+    if psh >= 6.2:
+        reasons_en.append(f"☀️ {city_en} has exceptional solar irradiance ({psh:.1f} PSH/day)")
+    elif psh >= 5.5:
+        reasons_en.append(f"☀️ Excellent solar resource in {city_en} ({psh:.1f} PSH/day)")
+    else:
+        reasons_en.append(f"☀️ Good solar irradiance in {city_en} ({psh:.1f} PSH/day)")
+
+    if roi > 200:
+        reasons_en.append(f"💰 Very high ROI ({roi:.0f}% over 25 years)")
+    elif roi > 100:
+        reasons_en.append(f"💰 Strong ROI ({roi:.0f}% over 25 years)")
+
+    if payback < 7:
+        reasons_en.append(f"⏱ Short payback period ({payback:.1f} years)")
+    elif payback < 12:
+        reasons_en.append(f"⏱ Reasonable payback period ({payback:.1f} years)")
+
+    if facility_type == "farm":
+        reasons_en.append("🌱 Solar energy improves farm profitability and reduces pump costs")
+    if facility_type == "remote":
+        reasons_en.append("🔋 Ideal system for remote off-grid locations")
+
+    if annual_savings > 30000:
+        reasons_en.append(f"💵 High annual savings ({annual_savings:,.0f} SAR/year)")
+    elif annual_savings > 5000:
+        reasons_en.append(f"💵 Significant annual savings ({annual_savings:,.0f} SAR/year)")
+
+    risks_en = []
+    if payback > 15:
+        risks_en.append(f"⚠️ Payback period is relatively long ({payback:.1f} years)")
+    if psh < 5.5:
+        risks_en.append("⚠️ Solar irradiance is below optimal average")
+    if roi < 50:
+        risks_en.append("⚠️ Low return on investment")
+    if system_type == "off_grid":
+        risks_en.append("🔋 Off-grid batteries require periodic maintenance")
+    if not risks_en:
+        risks_en.append("✅ No significant risks identified")
+
+    next_steps_en = [
+        f"📞 Contact certified solar providers in {city_en}",
+        "📋 Request quotes from at least 3 companies for comparison",
+        "⚡ Verify grid connection requirements with the utility company",
+        "🏗 Conduct a site survey to confirm structural suitability",
+        "📄 Inquire about REPDO renewable energy incentive programs",
+    ]
+
+    summary_en = (
+        f"Based on solar irradiance and financial analysis for your site in {city_en}, "
+        f"a {system_size_kw:.1f} kW solar system is recommended. "
+        f"Expected savings: {monthly_savings:,.0f} SAR/month "
+        f"({annual_savings:,.0f} SAR/year) with a payback period of {payback:.1f} years."
+    )
+
     return {
         "recommendation_key": rec_key,
         "recommendation_ar": rec_ar,
+        "recommendation_en": rec_en,
         "color": color,
-        "summary_ar": summary,
-        "reasons_ar": reasons if reasons else ["📊 النتائج تشير إلى جدوى اقتصادية مقبولة"],
-        "risks_ar": risks,
-        "next_steps_ar": next_steps,
+        "summary_ar": summary_ar,
+        "summary_en": summary_en,
+        "reasons_ar": reasons_ar,
+        "reasons_en": reasons_en,
+        "risks_ar": risks_ar,
+        "risks_en": risks_en,
+        "next_steps_ar": next_steps_ar,
+        "next_steps_en": next_steps_en,
     }

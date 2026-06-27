@@ -1,11 +1,14 @@
 services:
   - type: web
-    name: sec60
-    env: python
+    name: sec60-api
+    runtime: python
     rootDir: backend
-    buildCommand: pip install -r requirements.txt && python models/train_model.py && python ml/train_model.py
+    buildCommand: pip install -r requirements.txt && pip install PyMuPDF && python models/train_model.py
     startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT
     envVars:
       - key: ALLOWED_ORIGINS
-        value: https://sec60.vercel.app
+        value: https://sec60.vercel.app,https://sec60-git-main-alquraifah.vercel.app
+      - key: PYTHON_VERSION
+        value: "3.11.9"
     autoDeploy: true
+    plan: free

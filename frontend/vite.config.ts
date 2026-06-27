@@ -20,6 +20,7 @@ export default defineConfig(({ mode }) => {
         '/generate-report': { target: backendUrl, changeOrigin: true },
         '/reports':         { target: backendUrl, changeOrigin: true },
         '/health':          { target: backendUrl, changeOrigin: true },
+        '/forecast':        { target: backendUrl, changeOrigin: true },
       },
     },
   }

@@ -151,8 +151,10 @@ async def analyze(req: AnalyzeRequest):
         "ai_explanation": explanation,
         "facility_type": req.facility_type,
         "facility_type_label": facility_labels.get(req.facility_type, {}).get("ar", req.facility_type),
+        "facility_type_label_en": facility_labels.get(req.facility_type, {}).get("en", req.facility_type),
         "system_type": req.system_type,
         "system_type_label": system_labels.get(req.system_type, {}).get("ar", req.system_type),
+        "system_type_label_en": system_labels.get(req.system_type, {}).get("en", req.system_type),
         "monthly_kwh_input": round(monthly_kwh, 1),
         "assumptions": {
             "panel_wattage_w": a["panel_wattage_w"],

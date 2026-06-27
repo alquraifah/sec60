@@ -1,43 +1,46 @@
-import { createContext, useContext, useState, useEffect, ReactNode } from 'react'
-import { ar, en } from '../i18n/translations'
+import { createContext, useContext, useState, useEffect, type ReactNode } from 'react';
+import { translations, type Lang } from '../data/translations';
 
-export type Lang = 'ar' | 'en'
-
-const dicts: Record<Lang, Record<string, string>> = { ar, en }
-
-interface LangCtx {
-  lang: Lang
-  isRTL: boolean
-  setLang: (l: Lang) => void
-  t: (key: string) => string
+interface LanguageContextType {
+  lang: Lang;
+  setLang: (lang: Lang) => void;
+  t: typeof translations.en;
+  isRTL: boolean;
 }
 
-const LanguageContext = createContext<LangCtx>({
-  lang: 'ar', isRTL: true,
-  setLang: () => {}, t: k => k,
-})
+const LanguageContext = createContext<LanguageContextType | null>(null);
 
 export function LanguageProvider({ children }: { children: ReactNode }) {
-  const [lang, setLangState] = useState<Lang>('ar')
+  const [lang, setLangState] = useState<Lang>(() => {
+    return (localStorage.getItem('sec60-lang') as Lang) || 'en';
+  });
 
-  const setLang = (l: Lang) => {
-    setLangState(l)
-    document.documentElement.dir  = l === 'ar' ? 'rtl' : 'ltr'
-    document.documentElement.lang = l
-  }
+  const setLang = (newLang: Lang) => {
+    setLangState(newLang);
+    localStorage.setItem('sec60-lang', newLang);
+  };
+
+  const isRTL = lang === 'ar';
 
   useEffect(() => {
-    document.documentElement.dir  = 'rtl'
-    document.documentElement.lang = 'ar'
-  }, [])
+    document.documentElement.lang = lang;
+    document.documentElement.dir = isRTL ? 'rtl' : 'ltr';
+    document.body.style.fontFamily = isRTL
+      ? "'Cairo', system-ui, sans-serif"
+      : "'Inter', system-ui, sans-serif";
+  }, [lang, isRTL]);
 
-  const t = (key: string): string => dicts[lang][key] ?? key
+  const t = translations[lang] as typeof translations.en;
 
   return (
-    <LanguageContext.Provider value={{ lang, isRTL: lang === 'ar', setLang, t }}>
+    <LanguageContext.Provider value={{ lang, setLang, t, isRTL }}>
       {children}
     </LanguageContext.Provider>
-  )
+  );
 }
 
-export const useLang = () => useContext(LanguageContext)
+export function useLanguage() {
+  const ctx = useContext(LanguageContext);
+  if (!ctx) throw new Error('useLanguage must be used within LanguageProvider');
+  return ctx;
+}

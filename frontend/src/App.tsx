@@ -1,17 +1,27 @@
-import { Routes, Route } from 'react-router-dom'
-import { LanguageProvider } from './context/LanguageContext'
-import Home from './pages/Home'
-import Results from './pages/Results'
+import { Routes, Route } from 'react-router-dom';
+import { AnimatePresence } from 'framer-motion';
+import { LanguageProvider } from './context/LanguageContext';
+import { AnalysisProvider } from './context/AnalysisContext';
+import Landing from './pages/Landing';
+import Calculator from './pages/Calculator';
+import Dashboard from './pages/Dashboard';
+import AssistantPage from './pages/Assistant';
+import Report from './pages/Report';
 
 export default function App() {
   return (
     <LanguageProvider>
-      <div className="min-h-screen bg-slate-50">
-        <Routes>
-          <Route path="/"       element={<Home />} />
-          <Route path="/results" element={<Results />} />
-        </Routes>
-      </div>
+      <AnalysisProvider>
+        <AnimatePresence mode="wait">
+          <Routes>
+            <Route path="/" element={<Landing />} />
+            <Route path="/calculator" element={<Calculator />} />
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/assistant" element={<AssistantPage />} />
+            <Route path="/report" element={<Report />} />
+          </Routes>
+        </AnimatePresence>
+      </AnalysisProvider>
     </LanguageProvider>
-  )
+  );
 }
