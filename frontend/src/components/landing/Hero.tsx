@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ArrowRight, Play, TrendingUp, Zap, Shield, Clock } from 'lucide-react';
+import { ArrowRight, Play, Zap, Shield, Clock, Target } from 'lucide-react';
 import { useLanguage } from '../../context/LanguageContext';
 import { useCountUp } from '../../hooks/useCountUp';
 
@@ -99,9 +99,9 @@ export default function Hero() {
               className="mt-10 grid grid-cols-2 gap-3"
             >
               <AnimatedStat value={60} suffix="s" label={t.stats.timeLabel} icon={Clock} />
-              <AnimatedStat value={98} suffix="%" label={t.stats.accuracyLabel} icon={Shield} />
-              <AnimatedStat value={1200} suffix="+" label={t.stats.projectsLabel} icon={Zap} />
-              <AnimatedStat value={45} suffix="K" label={t.stats.co2Label} icon={TrendingUp} />
+              <AnimatedStat value={99} suffix=".1%" label={t.stats.sizingR2Label} icon={Shield} />
+              <AnimatedStat value={98} suffix=".2%" label={t.stats.feasibilityR2Label} icon={Target} />
+              <AnimatedStat value={1} suffix=".91" label={t.stats.feasibilityMAELabel} icon={Zap} />
             </motion.div>
           </div>
 
