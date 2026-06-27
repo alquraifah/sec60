@@ -42,8 +42,8 @@ export async function generateReport(
   return res.data;
 }
 
-export function getReportUrl(filename: string): string {
-  return `${API_BASE}/reports/${filename}`;
+export function getReportDownloadUrl(filename: string): string {
+  return `${API_BASE}/download-report/${filename}`;
 }
 
 export async function checkHealth() {

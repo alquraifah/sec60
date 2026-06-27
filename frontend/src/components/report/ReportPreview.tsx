@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { Download, Loader2, FileText, TrendingUp, Leaf, Zap, AlertCircle } from 'lucide-react';
 import { useAnalysis } from '../../context/AnalysisContext';
 import { useLanguage } from '../../context/LanguageContext';
-import { generateReport, getReportUrl } from '../../services/api';
+import { generateReport, getReportDownloadUrl } from '../../services/api';
 import { fmtNumber } from '../../utils/formatters';
 
 export default function ReportPreview() {
@@ -18,14 +18,26 @@ export default function ReportPreview() {
   const sys = result.system;
   const ai = result.ai_explanation;
 
+  const [downloadUrl, setDownloadUrl] = useState('');
+
   const handleDownload = async () => {
     setDownloading(true);
     setError('');
+    setDownloadUrl('');
     try {
       const res = await generateReport(result as unknown as Record<string, unknown>, lang);
       if (res.success && res.filename) {
-        const url = getReportUrl(res.filename);
-        window.open(url, '_blank');
+        const url = getReportDownloadUrl(res.filename);
+        setDownloadUrl(url);
+
+        // Use a hidden <a> link click instead of window.open — works on Safari iOS
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = res.filename;
+        link.rel = 'noopener';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
       } else {
         setError('Failed to generate report. Please try again.');
       }
@@ -231,6 +243,26 @@ export default function ReportPreview() {
           )}
         </button>
       </motion.div>
+
+      {downloadUrl && (
+        <motion.div
+          initial={{ opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="flex items-center justify-center gap-2 bg-green-50 border border-green-200 rounded-xl p-3"
+        >
+          <Download className="w-4 h-4 text-green-600" />
+          <span className="text-sm text-green-700">PDF ready — </span>
+          <a
+            href={downloadUrl}
+            download
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-sm font-semibold text-green-700 underline"
+          >
+            Tap here to download
+          </a>
+        </motion.div>
+      )}
 
       <p className="text-center text-xs text-slate-400">{t.report.generated}</p>
     </div>
